@@ -1,0 +1,48 @@
+<html>
+<body>
+
+<h2>AJAX</h2>
+
+<button type="button" onclick="loadDoc()">Request data</button>
+<button type="button" onclick="createFs()">Create FS</button>
+<button type="button" onclick="loadDoc()">Liste FS</button>
+
+
+
+<p id="demo"></p>
+
+
+<script>
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("GET", "filesystem://localhost:8888/apps", true);
+  xhttp.send();
+}
+
+
+function createFs() {
+  const url = "filesystem://example.com";
+    fetch(url, {
+        method : "POST",
+        body: new FormData(document.getElementById("inputform")),
+        // -- or --
+        // body : JSON.stringify({
+            // user : document.getElementById('user').value,
+            // ...
+        // })
+    }).then(
+        response => response.text() // .json(), etc.
+        // same as function(response) {return response.text();}
+    ).then(
+        html => console.log(html)
+    );
+}
+</script>
+
+</body>
+</html>
