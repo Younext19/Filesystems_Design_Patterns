@@ -1,20 +1,20 @@
 package filesystem;
-public class Fichier implements Noeud {
+public class Fichier implements Node {
     private String name;
     private String type;
     private String directory;
-    private Noeud parent;
+    private Node parent;
 
-    public Fichier(String name, String type, String currentDirectory, Noeud currentNoeud) {
+    public Fichier(String name, String type, String currentDirectory, Node currentNode) {
         this.name = name;
         this.type = type;
         this.directory = currentDirectory + "/" + name;
-        this.parent = currentNoeud;
+        this.parent = currentNode;
     }
 
 
     @Override
-    public Noeud getParent() {
+    public Node getParent() {
         return this.parent;
     }
 
@@ -52,12 +52,12 @@ public class Fichier implements Noeud {
     }
 
     @Override
-    public Noeud searchNode(String name) {
+    public Node searchNode(String name) {
         return null;
     }
 
     @Override
-    public void addNode(Noeud noeud) {
+    public void addNode(Node node) {
         //do nothing
         System.out.println("Vous ne pouvez pas ajouter");
     }

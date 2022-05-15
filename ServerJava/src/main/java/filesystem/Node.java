@@ -1,16 +1,16 @@
 package filesystem;
 
-public interface Noeud {
+public interface Node {
     public void details();
     public void list();
     public void listing(int spacing);
-    public Noeud getParent();
+    public Node getParent();
     public String getName();
     public String getType();
     public String getDirectory();
 
     int getComponentCount();
 
-    public void addNode(Noeud noeud);
-    public Noeud searchNode(String name);
+    public void addNode(Node node);
+    public Node searchNode(String name);
 }

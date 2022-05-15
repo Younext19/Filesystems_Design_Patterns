@@ -3,21 +3,21 @@ package filesystem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dossier implements Noeud {
+public class Dossier implements Node {
     private String name;
     private String type;
     private String directory;
     private int component_count;
-    private Noeud parent;
-    private List<Noeud> noeudList;
+    private Node parent;
+    private List<Node> nodeList;
 
-    public Dossier(String name, String type, String currentDirectory, Noeud currentNoeud) {
+    public Dossier(String name, String type, String currentDirectory, Node currentNode) {
         this.name = name;
         this.type = type;
         this.directory = currentDirectory + "/" + name;
-        this.parent = currentNoeud;
+        this.parent = currentNode;
         this.component_count = 0;
-        this.noeudList = new ArrayList<Noeud>();
+        this.nodeList = new ArrayList<Node>();
     }
 
     public Dossier(String name, String type, String currentDirectory) {
@@ -26,11 +26,11 @@ public class Dossier implements Noeud {
         this.directory = currentDirectory + "/" + name;
         this.parent = null;
         this.component_count = 0;
-        this.noeudList = new ArrayList<Noeud>();
+        this.nodeList = new ArrayList<Node>();
     }
 
     @Override
-    public Noeud getParent() {
+    public Node getParent() {
         return this.parent;
     }
 
@@ -74,17 +74,17 @@ public class Dossier implements Noeud {
             System.out.print(" ");
         }
         System.out.println("------" + this.name);
-        for(Noeud noeud : noeudList){
-            noeud.listing(spacing + 4);
+        for(Node node : nodeList){
+            node.listing(spacing + 4);
         }
     }
 
     @Override
-    public Noeud searchNode(String name) {
-        for(Noeud noeud : noeudList){
-            if(name.equalsIgnoreCase(noeud.getName())){
-                System.out.println( noeud.getName() + " " + noeud.getType() + "opened.");
-                return noeud;
+    public Node searchNode(String name) {
+        for(Node node : nodeList){
+            if(name.equalsIgnoreCase(node.getName())){
+                System.out.println( node.getName() + " " + node.getType() + "opened.");
+                return node;
             }
         }
         System.out.println("No such Folder found in this directory.");
@@ -93,15 +93,16 @@ public class Dossier implements Noeud {
 
 
     @Override
-    public void addNode(Noeud noeud){
-        if("fs".equalsIgnoreCase(noeud.getType())){
+    public void addNode(Node node){
+        if("fs".equalsIgnoreCase(node.getType())){
             System.out.println("Vous ne pouvez pas ajouter un système de fichier dans un dossier.");
         }
 
         else{
-            noeudList.add(noeud);
-            System.out.println(noeud.getName() + " " + noeud.getType() + " " + "created in " + noeud.getParent().getDirectory());
+            nodeList.add(node);
+            System.out.println(node.getName() + " " + node.getType() + " " + "created in " + node.getParent().getDirectory());
             component_count++;
         }
     }
+
 }

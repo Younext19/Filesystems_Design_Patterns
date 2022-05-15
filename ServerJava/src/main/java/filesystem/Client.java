@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Client {
-    private Noeud currentNoeud = null;
-    private List<Noeud> fsList;
+    private Node currentNode = null;
+    private ProxyNode prxNode;
+    private List<Node> fsList;
     private Scanner scanner;
 
     public void pressEnter(){
@@ -14,14 +15,14 @@ public class Client {
     }
 
     public void listAll(){
-        for(Noeud drive: fsList){
+        for(Node drive: fsList){
             drive.list();
         }
     }
 
     public void initialize(){
         scanner = new Scanner(System.in);
-        fsList = new ArrayList<Noeud>();
+        fsList = new ArrayList<Node>();
     }
 
     public void showPrompt(){
@@ -32,16 +33,17 @@ public class Client {
         System.out.println("5 Créer un fichier");
         System.out.println("6 Detaills du répertoire actuel");
         System.out.println("7 répertoire actuel");
-        System.out.println("8 Voir Tout");
+        System.out.println("8 Créer un lien symbolique");
+        System.out.println("9 Voir Tout");
         System.out.println("Autre _Quitter_");
 
-        if(currentNoeud ==null){
+        if(currentNode ==null){
             System.out.println("Pas de dossier");
             System.out.println("Entrez une valeur :");
         }
         else{
             System.out.println("Répertoire Actuel : ");
-            System.out.println(currentNoeud.getDirectory() + '/');
+            System.out.println(currentNode.getDirectory() + '/');
             System.out.println("Entrez une valeur :");
         }
     }
@@ -51,6 +53,7 @@ public class Client {
         boolean en_marche = true;
         int input;
         String name;
+        String path;
         FileSystem fileSystem;
         while(en_marche){
             showPrompt();
@@ -62,69 +65,79 @@ public class Client {
                     name = scanner.nextLine();
                     fileSystem = new FileSystem(name + ":");
                     fsList.add(fileSystem);
-                    currentNoeud = fileSystem;
+                    currentNode = fileSystem;
                     System.out.println(fileSystem.getName() + " " + fileSystem.getType() + " " + "crée!");
                     pressEnter();
                     break;
 
                 case 2:
-                    if(currentNoeud ==null){
+                    if(currentNode ==null){
                         System.out.println("Vous n'avez pas encore créer un système de fichier");
                         break;
                     }
                     System.out.println("Nom du dossier");
                     name = scanner.nextLine();
-                    currentNoeud.addNode(new Dossier(name, "folder", currentNoeud.getDirectory(), currentNoeud));
+                    currentNode.addNode(new Dossier(name, "folder", currentNode.getDirectory(), currentNode));
                     pressEnter();
                     break;
                 case 3:
-                    if(currentNoeud ==null){
+                    if(currentNode ==null){
                         System.out.println("Vous n'avez pas encore créer un système de fichier");
                         break;
                     }
                     System.out.println("Nom du dossier :");
                     name = scanner.nextLine();
-                    currentNoeud = currentNoeud.searchNode(name);
+                    currentNode = currentNode.searchNode(name);
                     break;
                 case 4:
-                    if(currentNoeud ==null){
+                    if(currentNode ==null){
                         System.out.println("Vous n'avez pas encore créer un système de fichier");
                         break;
                     }
-                    if(currentNoeud.getParent()!=null)
-                        currentNoeud = currentNoeud.getParent();
+                    if(currentNode.getParent()!=null)
+                        currentNode = currentNode.getParent();
                     else{
                         System.out.println("Ceci est le répertoire racine.");
                     }
                     pressEnter();
                     break;
                 case 5:
-                    if(currentNoeud ==null){
+                    if(currentNode ==null){
                         System.out.println("Vous n'avez pas encore créer un système de fichier.");
                         break;
                     }
                     System.out.println("Nom du fichier :");
                     name = scanner.nextLine();
-                    currentNoeud.addNode(new Fichier(name, "file", currentNoeud.getDirectory(), currentNoeud));
+                    currentNode.addNode(new Fichier(name, "file", currentNode.getDirectory(), currentNode));
                     pressEnter();
                     break;
                 case 6:
-                    if(currentNoeud ==null){
+                    if(currentNode ==null){
                         System.out.println("Vous n'avez pas encore créer un système de fichier");
                         break;
                     }
-                    currentNoeud.details();
+                    currentNode.details();
                     pressEnter();
                     break;
                 case 7:
-                    if(currentNoeud ==null){
+                    if(currentNode ==null){
                         System.out.println("Vous n'avez pas encore créer un système de fichier");
                         break;
                     }
-                    currentNoeud.list();
+                    currentNode.list();
                     pressEnter();
                     break;
                 case 8:
+                    if(currentNode ==null){
+                        System.out.println("Vous n'avez pas encore créer un système de fichier.");
+                        break;
+                    }
+                    System.out.println("Nom du fichier :");
+                    path = scanner.nextLine();
+                    currentNode.addNode(new ProxyNode(currentNode.searchNode(path), currentNode.getDirectory(),  currentNode));
+                    pressEnter();
+                    break;
+                case 9:
                     listAll();
                     break;
                 default:

@@ -2,13 +2,13 @@ package filesystem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileSystem implements Noeud {
+public class FileSystem implements Node, IterableCollection {
     private String name;
     private String type;
     private String directory;
     private int component_count;
-    private List<Noeud> noeudList;
-    private Noeud parent;
+    private List<Node> nodeList;
+    private Node parent;
 
 
     public FileSystem(String name) {
@@ -16,7 +16,7 @@ public class FileSystem implements Noeud {
         this.type = "fs";
         this.directory = name;
         this.component_count = 0;
-        this.noeudList = new ArrayList<Noeud>();
+        this.nodeList = new ArrayList<Node>();
         parent = null;
     }
 
@@ -38,13 +38,13 @@ public class FileSystem implements Noeud {
             System.out.print(" ");
         }
         System.out.println("------" + this.name);
-        for(Noeud noeud : noeudList){
-            noeud.listing(spacing + 4);
+        for(Node node : nodeList){
+            node.listing(spacing + 4);
         }
     }
 
     @Override
-    public Noeud getParent() {
+    public Node getParent() {
         return null;
     }
 
@@ -69,28 +69,33 @@ public class FileSystem implements Noeud {
     }
 
     @Override
-    public void addNode(Noeud noeud) {
+    public void addNode(Node node) {
 
-        if("fs".equalsIgnoreCase(noeud.getType())){
+        if("fs".equalsIgnoreCase(node.getType())){
             System.out.println("Vous ne pouvez pas ajouter un système de fichier dans un système de fichier");
         }
 
         else{
-            noeudList.add(noeud);
-            System.out.println(noeud.getName() + " " + noeud.getType() + " " + "Crée en " + noeud.getParent().getDirectory());
+            nodeList.add(node);
+            System.out.println(node.getName() + " " + node.getType() + " " + "Crée en " + node.getParent().getDirectory());
             component_count++;
         }
     }
 
     @Override
-    public Noeud searchNode(String name) {
-        for(Noeud noeud : noeudList){
-            if(name.equalsIgnoreCase(noeud.getName())){
-                System.out.println( noeud.getName() + " " + noeud.getType() + "opened.");
-                return noeud;
+    public Node searchNode(String name) {
+        for(Node node : nodeList){
+            if(name.equalsIgnoreCase(node.getName())){
+                System.out.println( node.getName() + " " + node.getType() + "opened.");
+                return node;
             }
         }
         System.out.println("Pas de dossier dans ce dossier.");
         return this;
+    }
+
+    @Override
+    public Iterator createIterator() {
+        return new NodeIterator(nodeList);
     }
 }
